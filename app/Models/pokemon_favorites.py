@@ -5,4 +5,9 @@ class PokemonFavorites(SuperClass):
     def __init__(self):
         super().__init__("pokemon_favorites")
     
+    def find_by_id(self):
+        raise NotImplementedError("Los pokemones favoritos no se pueden buscar individualmente")
+    
+
+    
     
