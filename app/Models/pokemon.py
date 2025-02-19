@@ -5,6 +5,9 @@ class Pokemon(SuperClass):
     def __init__(self):
         super().__init__("pokemons")
 
+    def find_all(self):
+        super().find_all()
+        
     def create(self, data):
         raise NotImplementedError("Los pokemones no se pueden crear")
     
@@ -13,4 +16,5 @@ class Pokemon(SuperClass):
     
     def update(self, object_id, data):
         raise NotImplementedError("Los pokemones no se pueden actualizar")
+
     
