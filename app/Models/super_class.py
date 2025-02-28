@@ -12,9 +12,10 @@ class SuperClass:
         datum = self.collection.find_one({
             "_id": object_id
         })
+        datum["_id"] = str(datum["_id"])
         return datum
     
-    def crear(self, data):
+    def create(self, data):
         print(data, "desde super clase")
         
         datum = self.collection.insert_one(data)
@@ -26,7 +27,7 @@ class SuperClass:
         },{
             "$set": data
         })
-        return datum
+        return True
 
     def delete(self, object_id):
         return self.collection.delete_one({
