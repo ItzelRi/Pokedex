@@ -1,23 +1,21 @@
-from flask import Blueprint, request, jsonify
-from app.Schemas.pokemon_schema import PokemonSchema
-from marshmallow import ValidationError
+from flask import Blueprint
+from app.Tools.response_manager import ResponseManager
 from app.Models.factory import ModelFactory
 from bson import ObjectId
+from flask_jwt_extended import jwt_required
 
+RM = ResponseManager()
 bp = Blueprint("pokemon",__name__, url_prefix="/pokemon")
-pokemon_schema= PokemonSchema()
-pokemon = ModelFactory.get_model("pokemon")
+pokemon_model = ModelFactory.get_model("pokemons")
 
-@bp.route("/get/<string:user_id>", methods=["GET"])
-def get_pokemon(pokemons):
-    pokemon = pokemon.find_by_id(ObjectId(pokemons))
-    return jsonify(pokemon, 200)
+@bp.route("/get/<string:pokemon_id>", methods=["GET"])
+@jwt_required()
+def get_pokemon(pokemon_id):
+    pokemon = pokemon.find_by_id(ObjectId(pokemon_id))
+    return RM.success(pokemon)
 
-@bp.route("/getall/<string:user_id>", methods=["GET"])
+@bp.route("/getall/", methods=["GET"])
 def getall():
-    try:
-        pokemons = pokemon.find_all()
-        allpokemons = list(pokemons)
-        return jsonify(allpokemons, 200)
-    except:
-        raise NotImplementedError("No se encontraron los pokemones")
+        data = pokemon_model.find_all()
+        return RM.success(data)
+    

@@ -1,47 +1,40 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request 
 from app.Schemas.pokemon_favorites_schema import PokemonFavoritesSchema
+from app.Tools.response_manager import ResponseManager
 from marshmallow import ValidationError
 from app.Models.factory import ModelFactory
 from bson import ObjectId
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
-bp = Blueprint("pokemon_favorites",__name__, url_prefix="/pokemon_favorites")
+RM = ResponseManager()
+bp = Blueprint("pokemon_favorites",__name__, url_prefix="/pokemonfav")
 pokemon_favorites_schema= PokemonFavoritesSchema()
-pokemon_favorites = ModelFactory.get_model("pokemon_favorites")
+pokemon_fav_model = ModelFactory.get_model("pokemon_favorites")
 
-@bp.route("/register", methods=["POST"])
-def register():
+@bp.route("/create", methods=["POST"])
+@jwt_required()
+def create():
     try:
-        data = pokemon_favorites_schema.load(request.json)
-        user_id=pokemon_favorites.create(data)
-        return jsonify({"user_id":str(user_id)},200) 
+        data = request.json
+        data = pokemon_favorites_schema.validate(data)
+        fp = pokemon_fav_model(data)
+        return RM.success({"_id":fp}) 
 
     except ValidationError as err:
-        return jsonify("Los parametros enviados son incorrectos", 400)
+        print(err)
+        return RM.error("Los parametros enviados son incorrectos")
 
-@bp.route("/update/<string:user_id>", methods=["PUT"])
-def update(user_id):
-    try:
-        data = pokemon_favorites_schema.load(request.json)
-        pokemon_favorites = pokemon_favorites.update(ObjectId(user_id), data)
-        return jsonify({
-            "data": pokemon_favorites
-        }, 200)
-    except ValidationError as err:
-        return jsonify("Los parametros enviados son incorrectos", 400)
-    
-@bp.route("/delete/<string:user_id>", methods=["DELETE"])
-def delete(user_id):
-    pokemon_favorites.delete(ObjectId(user_id))
-    return jsonify("Usuario eliminado con exito", 200)
+@bp.route("/delete/<string:id>", methods=["DELETE"])
+@jwt_required()
+def delete(id):
+    pokemon_fav_model.delete(ObjectId(id))
+    return RM.success("Usuario eliminado con exito")
 
-@bp.route("/getall/<string:user_id>", methods=["GET"])
-def getall(user_id):
-        pokemon_favorites = pokemon_favorites.find_all()
-        allpokemons = []
+@bp.route("/getall/", methods=["GET"])
+@jwt_required()
+def get_all():
+        user_id = get_jwt_identity()
+        data = pokemon_fav_model.find_all(user_id)
+        return RM.success(data)
 
-        for pokemon in pokemon_favorites:
-             if pokemon.user_id == user_id:
-                  
-                  allpokemons.append(pokemon)
-        return jsonify(allpokemons, 200)
 
