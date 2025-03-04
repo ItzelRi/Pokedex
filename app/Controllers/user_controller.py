@@ -20,7 +20,7 @@ def login():
     password = data.get("password", None)
     if not email or not password:
         return RM.error("Es necesario enviar todas las credenciales")
-    user = user_model.get_by_email_password(email)
+    user = user_model.get_by_email(email)
     if not user:
         return RM.error("No se encontro un usuario")
     if not EM.compare_hashes(password, user["password"]):
@@ -38,26 +38,26 @@ def register():
     except ValidationError as err:
         return RM.error("La peticion no esta completa")
 
-@bp.route("/update/", methods=["PUT"])
+@bp.route("/update", methods=["PUT"])
 @jwt_required()
 def update():
     user_id = get_jwt_identity()
     try:
         data = user_schema.load(request.json)
-        user["password"] = EM.create_hash(data["password"])
+        data["password"] = EM.create_hash(data["password"])
         user = user_model.update(ObjectId(user_id), data)
         return RM.success({"data": user})
     except ValidationError as err:
         return RM.error("Los parametros enviados son incorrectos")
     
-@bp.route("/delete/", methods=["DELETE"])
+@bp.route("/delete", methods=["DELETE"])
 @jwt_required()
 def delete():
     user_id = get_jwt_identity()
     user_model.delete(ObjectId(user_id))
     return RM.success("Usuario eliminado con exito")
 
-@bp.route("/get/", methods=["GET"])
+@bp.route("/get", methods=["GET"])
 @jwt_required()
 def get_user():
     user_id = get_jwt_identity()

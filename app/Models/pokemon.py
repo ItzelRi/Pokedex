@@ -4,10 +4,7 @@ from app.Models.super_class import SuperClass
 class Pokemon(SuperClass):
     def __init__(self):
         super().__init__("pokemons")
-
-    def find_all(self):
-        super().find_all()
-        
+ 
     def create(self, data):
         raise NotImplementedError("Los pokemones no se pueden crear")
     

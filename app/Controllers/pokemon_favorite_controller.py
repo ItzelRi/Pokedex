@@ -30,9 +30,9 @@ def create():
 @jwt_required()
 def delete(id):
     pokemon_fav_model.delete(ObjectId(id))
-    return RM.success("Usuario eliminado con exito")
+    return RM.success("Pokemon favorito eliminado con exito")
 
-@bp.route("/getall/", methods=["GET"])
+@bp.route("/get", methods=["GET"])
 @jwt_required()
 def get_all():
         user_id = get_jwt_identity()

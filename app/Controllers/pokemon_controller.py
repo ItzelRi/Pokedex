@@ -11,10 +11,10 @@ pokemon_model = ModelFactory.get_model("pokemons")
 @bp.route("/get/<string:pokemon_id>", methods=["GET"])
 @jwt_required()
 def get_pokemon(pokemon_id):
-    pokemon = pokemon.find_by_id(ObjectId(pokemon_id))
+    pokemon = pokemon_model.find_by_id(ObjectId(pokemon_id))
     return RM.success(pokemon)
 
-@bp.route("/getall/", methods=["GET"])
+@bp.route("/getall", methods=["GET"])
 def getall():
         data = pokemon_model.find_all()
         return RM.success(data)
