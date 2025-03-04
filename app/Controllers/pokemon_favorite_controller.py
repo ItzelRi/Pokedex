@@ -14,10 +14,12 @@ pokemon_fav_model = ModelFactory.get_model("pokemon_favorites")
 @bp.route("/create", methods=["POST"])
 @jwt_required()
 def create():
+    user_id = get_jwt_identity()
     try:
         data = request.json
-        data = pokemon_favorites_schema.validate(data)
-        fp = pokemon_fav_model(data)
+        data = pokemon_favorites_schema.load(data)
+        data["user_id"] = user_id
+        fp = pokemon_fav_model.create(data)
         return RM.success({"_id":fp}) 
 
     except ValidationError as err:

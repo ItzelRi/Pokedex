@@ -34,7 +34,7 @@ def register():
         data = user_schema.load(request.json)       
         data["password"]=EM.create_hash(data["password"])
         user_id = user_model.create(data)
-        return RM.succes({"user_id":str(user_id),"token":create_access_token(str(user_id))})
+        return RM.success({"user_id":str(user_id),"token":create_access_token(str(user_id))})
     except ValidationError as err:
         return RM.error("La peticion no esta completa")
 
@@ -44,6 +44,7 @@ def update():
     user_id = get_jwt_identity()
     try:
         data = user_schema.load(request.json)
+        user["password"] = EM.create_hash(data["password"])
         user = user_model.update(ObjectId(user_id), data)
         return RM.success({"data": user})
     except ValidationError as err:
@@ -61,5 +62,7 @@ def delete():
 def get_user():
     user_id = get_jwt_identity()
     user = user_model.find_by_id(ObjectId(user_id))
+    if not user:
+        return RM.error("El usuario no existe")
     return RM.success(user)
 
