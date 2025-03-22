@@ -60,6 +60,6 @@ input{
 }
 
 .container-footer > a{
-    color: blue;
     margin: 5px;
+    color: blue;
 }

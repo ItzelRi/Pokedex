@@ -1,0 +1,79 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-form {
+    margin: auto;
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.label {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 5px; 
+    text-align: left; 
+}
+
+input {
+    border-radius: 10px;
+    font-size: 15px;
+    width: 100%;
+}
+
+#send {
+    background-color: red;
+    color: black;
+    width: 100%;
+    height: auto;
+    font-weight: bold;
+    font-size: 15;
+    border-radius: 10px;
+    margin-top: 15px;
+    padding: 10px;
+}
+
+
+.btn-cancel {
+    background-color: gray;
+    color: white;
+    width: 100%;
+    height: auto;
+    font-weight: bold;
+    font-size: 15;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.btn-cancel:hover {
+    background-color: darkgray;
+}
+
+.container-footer {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.container-footer > a {
+    margin: 5px;
+    text-decoration: none;
+    color: blue;
+}
+
+
