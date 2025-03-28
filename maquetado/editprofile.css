@@ -58,10 +58,6 @@ input {
     padding: 10px;
 }
 
-.btn-cancel:hover {
-    background-color: darkgray;
-}
-
 .container-footer {
     margin: auto;
     display: flex;
@@ -69,11 +65,3 @@ input {
     font-size: 15px;
     margin-top: 20px;
 }
-
-.container-footer > a {
-    margin: 5px;
-    text-decoration: none;
-    color: blue;
-}
-
-
